@@ -1,0 +1,125 @@
+{
+    "play":1,
+    "script":[
+        {
+            "id":1, 
+            "type": "text",
+            "action": {
+                "color": "grey",
+                "size": "200%",
+                "weight": "normal",
+                "coord": "10:40",
+                "value": "Please use the mic button to talk with me"
+            },
+            "sec": 1
+        },
+        {
+            "id":2, 
+            "type": "text",
+            "action": {
+                "color": "#ff0000",
+                "size": "400%",
+                "weight": "normal",
+                "coord": "100%-130:120",
+                "font": "FontAwesome",
+                "value": "\uf124"
+            },
+            "sec": 1.5
+        },
+        {
+            "id":3, 
+            "type": "clear",
+            "sec": 2
+        },
+        {
+            "id":4, 
+            "type": "text",
+            "action": {
+                "color": "grey",
+                "size": "200%",
+                "weight": "normal",
+                "coord": "10:40",
+                "value": "Please use the mic button to talk with me"
+            },
+            "sec": 2
+        },
+        {
+            "id":5, 
+            "type": "text",
+            "action": {
+                "color": "#ff0000",
+                "size": "400%",
+                "weight": "normal",
+                "coord": "100%-130:120",
+                "font": "FontAwesome",
+                "value": "\uf124"
+            },
+            "sec": 2.5
+        },
+        {
+            "id":6, 
+            "type": "clear",
+            "sec": 3
+        },
+        {
+            "id":7, 
+            "type": "text",
+            "action": {
+                "color": "grey",
+                "size": "200%",
+                "weight": "normal",
+                "coord": "10:40",
+                "value": "Please use the mic button to talk with me"
+            },
+            "sec": 3
+        },
+        {
+            "id":8, 
+            "type": "text",
+            "action": {
+                "color": "#ff0000",
+                "size": "400%",
+                "weight": "normal",
+                "coord": "100%-130:120",
+                "font": "FontAwesome",
+                "value": "\uf124"
+            },
+            "sec": 3.5
+        },
+        {
+            "id":8, 
+            "type": "clear",
+            "sec": 4
+        },
+        {
+            "id":7, 
+            "type": "text",
+            "action": {
+                "color": "grey",
+                "size": "200%",
+                "weight": "normal",
+                "coord": "10:40",
+                "value": "Please use the mic button to talk with me"
+            },
+            "sec": 4
+        },
+        {
+            "id":8, 
+            "type": "text",
+            "action": {
+                "color": "#ff0000",
+                "size": "400%",
+                "weight": "normal",
+                "coord": "100%-130:120",
+                "font": "FontAwesome",
+                "value": "\uf124"
+            },
+            "sec": 4.5
+        },
+        {
+            "id":8, 
+            "type": "clear",
+            "sec": 5
+        }
+    ]
+}

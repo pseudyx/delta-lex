@@ -1,0 +1,172 @@
+{
+    "replay":false,
+    "script":[
+        {
+            "id":1, 
+            "type": "text",
+            "action": {
+                "color": "grey",
+                "size": "200%",
+                "weight": "normal",
+                "coord": "10:40",
+                "value": "Hello..."
+            },
+            "sec": 2
+        },
+        {
+            "id":2, 
+            "type": "text",
+            "action": {
+                "color": "grey",
+                "weight": "normal",
+                "size": "200%",
+                "coord": "10:80",
+                "value": "I am"
+            },
+            "sec": 3.5
+        },
+        {
+            "id":3, 
+            "type": "text",
+            "action": {
+                "color": "grey",
+                "weight": "bold",
+                "size": "200%",
+                "coord": "70:80",
+                "value": "DELTA"
+            },
+            "sec": 4
+        },
+        {
+            "id":14, 
+            "type": "clear",
+            "sec": 6
+        },
+        {
+            "id": 4,
+            "type": "text", 
+            "action": {
+                "color": "grey",
+                "weight": "bold",
+                "size": "200%",
+                "coord": "40:120",
+                "value": "D"
+            },
+            "sec": 6
+        },
+        {
+            "id": 5,
+            "type": "text", 
+            "action": {
+                "color": "grey",
+                "weight": "normal",
+                "size": "200%",
+                "coord": "80:120",
+                "value": "igital"
+            },
+            "sec": 6
+        },
+        {
+            "id": 6,
+            "type": "text", 
+            "action": {
+                "color": "grey",
+                "weight": "bold",
+                "size": "200%",
+                "coord": "40:160",
+                "value": "E"
+            },
+            "sec": 7
+        },
+        {
+            "id": 7,
+            "type": "text", 
+            "action": {
+                "color": "grey",
+                "weight": "normal",
+                "size": "200%",
+                "coord": "80:160",
+                "value": "ntity"
+            },
+            "sec": 7
+        },
+        {
+            "id": 8,
+            "type": "text", 
+            "action": {
+                "color": "grey",
+                "weight": "bold",
+                "size": "200%",
+                "coord": "40:200",
+                "value": "L"
+            },
+            "sec": 8
+        },
+        {
+            "id": 9,
+            "type": "text", 
+            "action": {
+                "color": "grey",
+                "weight": "normal",
+                "size": "200%",
+                "coord": "80:200",
+                "value": "inguistic"
+            },
+            "sec": 8
+        },
+        {
+            "id": 10,
+            "type": "text", 
+            "action": {
+                "color": "grey",
+                "weight": "bold",
+                "size": "200%",
+                "coord": "40:240",
+                "value": "T"
+            },
+            "sec": 9
+        },
+        {
+            "id": 11,
+            "type": "text", 
+            "action": {
+                "color": "grey",
+                "weight": "normal",
+                "size": "200%",
+                "coord": "80:240",
+                "value": "erminal"
+            },
+            "sec": 9
+        },
+        {
+            "id": 12,
+            "type": "text", 
+            "action": {
+                "color": "grey",
+                "weight": "bold",
+                "size": "200%",
+                "coord": "40:280",
+                "value": "A"
+            },
+            "sec": 10
+        },
+        {
+            "id": 13,
+            "type": "text", 
+            "action": {
+                "color": "grey",
+                "weight": "normal",
+                "size": "200%",
+                "coord": "80:280",
+                "value": "ssistant"
+            },
+            "sec": 10
+        },
+        {
+            "id":14, 
+            "type": "clear",
+            "sec": 13
+        }
+        
+    ]
+}
