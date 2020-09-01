@@ -13,6 +13,14 @@ export class Menu {
         }
     }
 
+    onRecord(){
+        this.micBtn.onRecord();
+    }
+
+    onStop(){
+        this.micBtn.onStop();
+    }
+
     render() {
         if(this.enabled){
             var pos = {

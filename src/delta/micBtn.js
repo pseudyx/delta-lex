@@ -6,6 +6,14 @@ export class MicBtn {
         
     }
 
+    onRecord(){
+        this.toggle = true;
+    }
+
+    onStop(){
+        this.toggle = false;
+    }
+
     onPress(){
         this.toggle = !this.toggle;
     }
