@@ -62,7 +62,7 @@ export class AudioControl {
         audio.play();
     };
 
-    play = (buffer, callback) => {
+    play = (buffer, callback, visualizer) => {
         if (typeof buffer === 'undefined') {
           return;
         }
@@ -77,14 +77,38 @@ export class AudioControl {
             this.playbackSource.buffer = buf;
             // Set the destination (the actual audio-rendering device--your device's speakers).
             this.playbackSource.connect(this.audioRecorder.audioContext().destination);
+
             // Add an "on ended" callback.
             this.playbackSource.onended = (event) => {
               if (typeof callback === 'function') {
                 callback();
               }
             };
+
+            /* my attempt at playback visualiseation*/
+            var node = this.audioRecorder.audioContext().createScriptProcessor(4096, 1, 1);
+            node.onaudioprocess = () => {
+              render();
+            };
+
+            var analyser = this.audioRecorder.audioContext().createAnalyser();
+            this.playbackSource.connect(analyser);
+            analyser.connect(node);
+            node.connect(this.audioRecorder.audioContext().destination);
+            var dataArray = new Uint8Array(analyser.frequencyBinCount);
+
+            function render(){
+              //requestAnimationFrame(render);
+              if (typeof visualizer === 'function') {
+                analyser.getByteTimeDomainData(dataArray);
+                visualizer(dataArray, analyser.frequencyBinCount);
+              }
+            }
+            /* end */
+
             // Start the playback.
             this.playbackSource.start(0);
+            //render();
           });
         };
         fileReader.readAsArrayBuffer(myBlob);

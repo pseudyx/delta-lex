@@ -1,11 +1,11 @@
 
-import * as audioUtils      from '../lib/audioUtils';  // for encoding audio data as PCM
+import * as audioUtils      from './audioUtils';  // for encoding audio data as PCM
 import crypto               from 'crypto'; // tot sign our pre-signed URL
-import v4                   from '../lib/aws-signature-v4'; // to generate our pre-signed URL
+import v4                   from './aws-signature-v4'; // to generate our pre-signed URL
 import * as marshaller      from '@aws-sdk/eventstream-marshaller'; // for converting binary event stream messages to and from JSON
 import * as util_utf8_node  from '@aws-sdk/util-utf8-node'; // utilities for encoding and decoding UTF8
 import mic                  from 'microphone-stream'; // collect microphone input as a stream of raw bytes
-import config               from '../delta-config';
+import config               from '../../delta-config';
 
 export class Transcribe{
     constructor(){

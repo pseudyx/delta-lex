@@ -93,7 +93,7 @@ export class Recorder {
 
     record = (onSilence, visualizer) => {
       this.silenceCallback = onSilence;
-      this.visualizationCallback = visualizer;
+      //this.visualizationCallback = visualizer;
       this.start = Date.now();
       this.recording = true;
     };

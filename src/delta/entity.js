@@ -6,6 +6,7 @@ export class Entity{
   constructor(){
     this.renderList = [];
     this.eye = {x: 0, y:0 }
+    this.voiceBuffer = {dataArray: [128], bufferLength: 1}
   }
 
   init(context){
@@ -13,6 +14,11 @@ export class Entity{
     this.menu = new Menu(context);
     var startTime = (new Date()).getTime();
     this.loop(this.ctx, startTime);
+  }
+
+  setVoiceBuffer(dataArray, bufferLength){
+    this.voiceBuffer.dataArray = dataArray;
+    this.voiceBuffer.bufferLength = bufferLength;
   }
 
   setEye(x,y){
@@ -56,12 +62,52 @@ export class Entity{
   
     Body(ctx, nextx, nexty);
     Eyeball(ctx, nextx, nexty, this.eye.x, this.eye.y);
+    this.VoiceVisualizer(ctx, nextx, nexty, this.eye.x, this.eye.y);
     this.menu.render();
   
     this.renderList.forEach(action => action.fx(ctx));
   
     // request new frame
     window.requestAnimFrame(() => this.loop(ctx, startTime));
+  }
+
+  VoiceVisualizer = (ctx, cx, cy, lx, ly) => {
+    var LENGTH = 4.1/100 *ctx.canvas.width;
+    var x = cx - (LENGTH/2);
+
+      ctx.lineWidth = 1;
+      ctx.strokeStyle = 'rgb(77, 78, 128)';
+      ctx.beginPath();
+
+      var sliceWidth = LENGTH * 1.0 / this.voiceBuffer.bufferLength;
+
+      lx = (lx > 10) ? 10 : lx;
+      lx = (lx < -10) ? -10 : lx;
+      ly = (ly > 10) ? 10 : ly;
+      ly = (ly < -10) ? -10 : ly;
+
+      for (var i = 0; i < this.voiceBuffer.bufferLength; i++) {
+        var v = this.voiceBuffer.dataArray[i] / 128.0;
+        var y = v*cy;
+        /* == Constrain to max length == */
+        if(y > cy+(LENGTH/2)){
+          y = cy+(LENGTH/2);
+        }
+        if(y < cy-(LENGTH/2)){
+          y = cy-(LENGTH/2);
+        }
+        /* == */
+        if (i === 0) {
+          ctx.moveTo(x+lx, y+ly);
+        } else {
+          ctx.lineTo(x+lx, y+ly);
+        }
+        x += sliceWidth;
+      }
+
+      ctx.lineTo(x+lx, cy+ly);
+      ctx.stroke();
+
   }
    
 }

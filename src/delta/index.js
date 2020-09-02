@@ -78,6 +78,7 @@ export const Delta = ({width, height}) =>  {
       console.log(error);
     }, function (timeDomain, bufferLength) {
       //onAudioData
+      Entity.setVoiceBuffer(timeDomain, bufferLength);
     });
     conversation.advanceConversation();
   }

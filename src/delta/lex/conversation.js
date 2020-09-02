@@ -181,7 +181,7 @@ export class Speaking {
                 this.state.audioControl.startRecording(this.state.onSilence, this.state.onAudioData, this.state.config.silenceDetectionConfig);
                 this.state.transition(new Listening(this.state));
             }
-            });
+            }, this.state.onAudioData);
         } else {
             this.state.transition(new Initial(this.state));
         }
