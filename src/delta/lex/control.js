@@ -8,7 +8,7 @@ export class AudioControl {
         this.audioSupported = true;
         this.playbackSource = {};
         this.audioRecorder = {};
-        
+ 
         if (this.checkAudioSupport) {
             this.supportsAudio(this.audioSupported);
         }
@@ -72,6 +72,23 @@ export class AudioControl {
         fileReader.onload = (e) => {
           // Once we have an ArrayBuffer we can create our BufferSource and decode the result as an AudioBuffer.
           this.playbackSource = this.audioRecorder.audioContext().createBufferSource();
+          
+          /* my attempt at playback visualiseation*/
+          var node = this.audioRecorder.audioContext().createScriptProcessor(4096, 1, 1);
+          var analyser = this.audioRecorder.audioContext().createAnalyser();
+          this.playbackSource.connect(analyser);
+          analyser.connect(node);
+          node.connect(this.audioRecorder.audioContext().destination);
+          var dataArray = new Uint8Array(analyser.frequencyBinCount);
+          
+          node.onaudioprocess = () => {
+            if (typeof visualizer === 'function') {
+              analyser.getByteTimeDomainData(dataArray);
+              visualizer(dataArray, analyser.frequencyBinCount);
+            }
+          };
+          /* end */
+          
           this.audioRecorder.audioContext().decodeAudioData(e.target.result, (buf) => {
             // Set the source buffer as our new AudioBuffer.
             this.playbackSource.buffer = buf;
@@ -83,32 +100,10 @@ export class AudioControl {
               if (typeof callback === 'function') {
                 callback();
               }
-            };
-
-            /* my attempt at playback visualiseation*/
-            var node = this.audioRecorder.audioContext().createScriptProcessor(4096, 1, 1);
-            node.onaudioprocess = () => {
-              render();
-            };
-
-            var analyser = this.audioRecorder.audioContext().createAnalyser();
-            this.playbackSource.connect(analyser);
-            analyser.connect(node);
-            node.connect(this.audioRecorder.audioContext().destination);
-            var dataArray = new Uint8Array(analyser.frequencyBinCount);
-
-            function render(){
-              //requestAnimationFrame(render);
-              if (typeof visualizer === 'function') {
-                analyser.getByteTimeDomainData(dataArray);
-                visualizer(dataArray, analyser.frequencyBinCount);
-              }
             }
-            /* end */
-
+            
             // Start the playback.
             this.playbackSource.start(0);
-            //render();
           });
         };
         fileReader.readAsArrayBuffer(myBlob);
@@ -127,7 +122,7 @@ export class AudioControl {
 
     supportsAudio = (callback) => {
         callback = callback || function () { /* no op */ };
-        var isSupported = this.audioSupported;
+        //var isSupported = this.audioSupported;
         if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
           this.audioRecorder = new rec.AudioRecorder();
           this.audioRecorder.requestDevice()
@@ -140,7 +135,9 @@ export class AudioControl {
 
       isSupported = (isSupported, callback) => {
         this.audioSupported = isSupported;
-        callback(isSupported);
+        if(typeof callback == "function"){
+          callback(isSupported);
+        }
       }
 
 }

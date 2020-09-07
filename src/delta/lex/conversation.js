@@ -1,4 +1,4 @@
-import AWS from 'aws-sdk';
+import AWS, { config } from 'aws-sdk';
 import { AudioControl } from './control.js';
 
 const DEFAULT_LATEST = '$LATEST';
@@ -29,11 +29,40 @@ export default class Conversation {
           });
         this.validateConfig();
 
-        this.audioControl = new AudioControl({ checkAudioSupport: false });
+        this.audioControl = new AudioControl({ checkAudioSupport: true });
         this.lexruntime = new AWS.LexRuntime();
-
+        
         //set init state
         this.currentState = new Initial(this);
+    }
+
+    elicitIntent = (intentName) => {
+          const request = {
+
+                  botName: this.lexConfig.botName,
+                  botAlias: this.lexConfig.botAlias,
+                  userId: this.lexConfig.userId,
+                  dialogAction: {
+                    type:'Delegate',
+                    intentName:intentName
+                  },
+                  accept: this.lexConfig.accept
+              
+          }
+
+        this.lexruntime.putSession(request, (err, data) => {
+            if (err) {
+                console.log('ERROR', err, err.stack);
+                this.transition(new Initial(this)); 
+            } else { 
+                console.log('DATA', data);
+                this.audioOutput = data;
+                this.transition(new Speaking(this));
+                this.onSuccess(data);
+            }
+          });
+
+        console.log(`putSession: ${intentName}`);
     }
 
     onSilence = () => {

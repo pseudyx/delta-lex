@@ -1,21 +1,27 @@
-import React, { useRef, useEffect, useState } from 'react';
-import Entity from './entity';
+import React, { useRef, useEffect } from 'react';
+import Entity from './entity/entity';
 import ActionScripter from './actionScripter';
 import AWS from 'aws-sdk';
 import LexAudio from './lex/lex-audio';
-import config               from '../delta-config';
+import appConfig from '../delta-config';
 
+//const session = new LexAudio.Session({ botName: 'Delta_AU' });
 
 export const Delta = ({width, height}) =>  {
-    const canvasRef = useRef(null);
-    const cnvStyle = {
-        backgroundColor: 'black'
-    }  
-    //const [actions, setActions] = useState([]);
+  const canvasRef = useRef(null);
+  const cnvStyle = {
+    backgroundColor: 'black'
+  }  
+  const config = {
+    lexConfig: LexAudio.Session({ botName: 'Delta_AU' })
+  }
 
   useEffect(() => {
-    AWS.config.credentials = new AWS.Credentials(config.aws_iam_key, config.aws_iam_secret, null);
-    AWS.config.region = config.aws_region;
+    AWS.config.credentials = new AWS.Credentials(appConfig.aws_iam_key, appConfig.aws_iam_secret, null);
+    AWS.config.region = appConfig.aws_region;
+
+    var conversation = new LexAudio.Conversation(config);
+    conversation.elicitIntent('Welcome');
 
     const canvas = canvasRef.current;
     canvas.width = width ?? window.innerWidth;
@@ -51,16 +57,11 @@ export const Delta = ({width, height}) =>  {
 
   const eventTrigger = (evt) => {
     eventHandlers[evt.name](evt.state);
-    //Typewriter.writeLine(JSON.stringify(evt));
   }
 
   const eventHandlers = [];
   eventHandlers["MicBtn"] = (evtState) => {
     
-    var config = {
-      lexConfig: { botName: 'Delta' }
-    }
-
     var conversation = new LexAudio.Conversation(config, function (state) {
       //onStateChange
       if (state === 'Listening') {
@@ -73,6 +74,15 @@ export const Delta = ({width, height}) =>  {
     }, function (data) {
       //onSuccess
       console.log('Transcript: ', data.inputTranscript, ", Response: ", data.message);
+
+      //"slots":{"State":"Victoria","LastName":"doe","Name":"john"}
+      switch(data.dialogState){
+        case "Fulfilled":
+          if(data.intentName == "Personalise_AU"){
+            //session.setSessionStore(data.slots);
+          }
+        break
+      }
     }, function (error) {
       //onError
       console.log(error);
