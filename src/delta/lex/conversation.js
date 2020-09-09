@@ -36,14 +36,14 @@ export default class Conversation {
         this.currentState = new Initial(this);
     }
 
-    elicitIntent = (intentName) => {
+    elicitIntent = (intentName, action) => {
           const request = {
 
                   botName: this.lexConfig.botName,
                   botAlias: this.lexConfig.botAlias,
                   userId: this.lexConfig.userId,
                   dialogAction: {
-                    type:'Delegate',
+                    type:action,
                     intentName:intentName
                   },
                   accept: this.lexConfig.accept

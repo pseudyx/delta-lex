@@ -1,27 +1,25 @@
 import React, { useRef, useEffect } from 'react';
+import AWS from 'aws-sdk';
 import Entity from './entity/entity';
 import ActionScripter from './actionScripter';
-import AWS from 'aws-sdk';
 import LexAudio from './lex/lex-audio';
-import appConfig from '../delta-config';
+import appConfig from '../app-config';
 
-//const session = new LexAudio.Session({ botName: 'Delta_AU' });
-
-export const Delta = ({width, height}) =>  {
+export const Delta = ({width, height, name, commandHandler}) =>  {
   const canvasRef = useRef(null);
   const cnvStyle = {
     backgroundColor: 'black'
   }  
   const config = {
-    lexConfig: LexAudio.Session({ botName: 'Delta_AU' })
+    lexConfig: LexAudio.Session({ botName: name })
   }
 
   useEffect(() => {
     AWS.config.credentials = new AWS.Credentials(appConfig.aws_iam_key, appConfig.aws_iam_secret, null);
     AWS.config.region = appConfig.aws_region;
 
-    var conversation = new LexAudio.Conversation(config);
-    conversation.elicitIntent('Welcome');
+    var conversation = new LexAudio.Conversation(config, null, null, null, (timeDomain, bufferLength) => Entity.setVoiceBuffer(timeDomain, bufferLength));
+    conversation.elicitIntent('Welcome', 'Delegate');
 
     const canvas = canvasRef.current;
     canvas.width = width ?? window.innerWidth;
@@ -48,6 +46,10 @@ export const Delta = ({width, height}) =>  {
 
     canvas.addEventListener('click', (evt) => Entity.onClick(evt,eventTrigger), false);
 
+    if(typeof commandHandler !== 'function'){
+      commandHandler = (cmd, ...args) => console.log(cmd, args);
+    }
+
   }, []);
 
   const enableInteraction = () => {
@@ -65,6 +67,7 @@ export const Delta = ({width, height}) =>  {
     var conversation = new LexAudio.Conversation(config, function (state) {
       //onStateChange
       if (state === 'Listening') {
+        Entity.menu.onRecord();
         console.log('state: Listening');
       }
       if (state === 'Sending') {
@@ -75,11 +78,12 @@ export const Delta = ({width, height}) =>  {
       //onSuccess
       console.log('Transcript: ', data.inputTranscript, ", Response: ", data.message);
 
-      //"slots":{"State":"Victoria","LastName":"doe","Name":"john"}
       switch(data.dialogState){
         case "Fulfilled":
-          if(data.intentName == "Personalise_AU"){
-            //session.setSessionStore(data.slots);
+          if(data.intentName == "Search"){
+            commandHandler('window', null, (id) => {
+              commandHandler('search', data.slots.Query, data.slots.Num, (response) => renderToWindow(response, id));
+            });
           }
         break
       }
@@ -91,6 +95,14 @@ export const Delta = ({width, height}) =>  {
       Entity.setVoiceBuffer(timeDomain, bufferLength);
     });
     conversation.advanceConversation();
+  }
+
+  const renderToWindow = (response, id) => {
+
+    var results = response.results
+    var htmlContent = (<ul>{results.map((result, i) => (<li key={i}><a href={result.link} style={{color:'#ccc'}} target="_blank">{result.title}</a></li>))}</ul>);
+
+    commandHandler('window', {id: id, content: htmlContent});
   }
   
   return (<canvas ref={canvasRef} id="cnv" style={cnvStyle}>Your browser does not support the HTML canvas tag.</canvas>);

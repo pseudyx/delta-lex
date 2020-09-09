@@ -1,0 +1,32 @@
+.draggable {
+    /*background-color: rgba(225, 225, 225, 0.25);
+    border: 1px solid rgba(225, 225, 225, 0.25);*/
+    background-color: rgb(56, 56, 56);
+    border: 1px solid rgb(93, 93, 93);
+    border-radius: none;
+}
+
+.draggable.dragging {
+  background-color: rgba(225, 225, 225, 0.25); 
+}
+
+.dragHeader {
+    background-color: rgba(225, 225, 225, 0.25);
+    color: #fff;
+    border-top-left-radius: none;
+    border-top-right-radius: none;
+}
+
+.dragHeader .btn {
+    color: #000;
+    background-color: rgba(225, 225, 225, 0.25);
+    font-weight: bold;
+    border: #000 1px solid;
+    border-radius: none;
+    margin-right: none;
+  }
+
+  .dragHeader .btn:hover {
+    background-color: #0a2f4d;
+    color: #fff;
+  }
