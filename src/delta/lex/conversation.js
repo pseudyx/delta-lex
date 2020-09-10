@@ -5,12 +5,7 @@ const DEFAULT_LATEST = '$LATEST';
 const DEFAULT_CONTENT_TYPE = 'audio/x-l16; sample-rate=16000';
 const DEFAULT_USER_ID = 'userId';
 const DEFAULT_ACCEPT_HEADER_VALUE = 'audio/mpeg';
-// const MESSAGES = Object.freeze({
-//   PASSIVE: 'Passive',
-//   LISTENING: 'Listening',
-//   SENDING: 'Sending',
-//   SPEAKING: 'Speaking'
-// });
+
 
 export default class Conversation {
     constructor(config, onStateChange, onSuccess, onError, onAudioData) {

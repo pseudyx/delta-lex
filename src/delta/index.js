@@ -67,7 +67,7 @@ export const Delta = ({width, height, name, commandHandler}) =>  {
   }
 
   const eventTrigger = (evt) => {
-    eventHandlers[evt.name](evt.state);
+    eventHandlers[evt.name]?eventHandlers[evt.name](evt.state):console.log(`no fx for: ${evt.name}`);
   }
 
   const eventHandlers = [];
