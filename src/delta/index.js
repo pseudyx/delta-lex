@@ -4,6 +4,7 @@ import Entity from './entity/entity';
 import ActionScripter from './actionScripter';
 import LexAudio from './lex/lex-audio';
 import appConfig from '../app-config';
+import * as utils from '../lib/utils';
 
 export const Delta = ({width, height, name, commandHandler}) =>  {
   const canvasRef = useRef(null);
@@ -18,13 +19,9 @@ export const Delta = ({width, height, name, commandHandler}) =>  {
     AWS.config.credentials = new AWS.Credentials(appConfig.aws_iam_key, appConfig.aws_iam_secret, null);
     AWS.config.region = appConfig.aws_region;
 
-    var conversation = new LexAudio.Conversation(config, null, null, null, (timeDomain, bufferLength) => Entity.setVoiceBuffer(timeDomain, bufferLength));
-    conversation.elicitIntent('Welcome', 'Delegate');
-
     const canvas = canvasRef.current;
     canvas.width = width ?? window.innerWidth;
     canvas.height = height ?? window.innerHeight;
-
     const context = canvas.getContext("2d");
 
     window.addEventListener("resize", (e) => { 
@@ -42,15 +39,27 @@ export const Delta = ({width, height, name, commandHandler}) =>  {
     Entity.init(context);
     Entity.isInteractive(false);
     ActionScripter.Actions = Entity.renderList;
-    ActionScripter.start("intro", enableInteraction);
-
+    
     canvas.addEventListener('click', (evt) => Entity.onClick(evt,eventTrigger), false);
 
     if(typeof commandHandler !== 'function'){
       commandHandler = (cmd, ...args) => console.log(cmd, args);
     }
 
+    onLoad();
   }, []);
+
+  const onLoad = () =>{
+    var conversation = new LexAudio.Conversation(config, null, null, null, (timeDomain, bufferLength) => Entity.setVoiceBuffer(timeDomain, bufferLength));
+    var replay = utils.getCookie(`noReplay-intro`);
+    if(replay != ""){
+      enableInteraction();
+      conversation.elicitIntent('Welcome', 'Delegate');
+    } else {
+      ActionScripter.start("intro", enableInteraction);
+      setTimeout(() => conversation.elicitIntent('Intro', 'Delegate'), 2000);
+    }
+  }
 
   const enableInteraction = () => {
     Entity.isInteractive(true);

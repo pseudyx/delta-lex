@@ -38,7 +38,6 @@ export default class Conversation {
 
     elicitIntent = (intentName, action) => {
           const request = {
-
                   botName: this.lexConfig.botName,
                   botAlias: this.lexConfig.botAlias,
                   userId: this.lexConfig.userId,
@@ -47,7 +46,6 @@ export default class Conversation {
                     intentName:intentName
                   },
                   accept: this.lexConfig.accept
-              
           }
 
         this.lexruntime.putSession(request, (err, data) => {
@@ -55,7 +53,7 @@ export default class Conversation {
                 console.log('ERROR', err, err.stack);
                 this.transition(new Initial(this)); 
             } else { 
-                console.log('DATA', data);
+                //console.log('DATA', data);
                 this.audioOutput = data;
                 this.transition(new Speaking(this));
                 this.onSuccess(data);
