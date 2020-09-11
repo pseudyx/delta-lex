@@ -1,4 +1,5 @@
 import search from './cmdSearch';
+import weather from './cmdWeather';
 
 export const cmder = {
     events: {},
@@ -58,6 +59,7 @@ cmder["window"] = (args, emitter) => {
   
 };
 cmder["search"] = search;
+cmder["weather"] = weather;
 
 export default cmder;
 

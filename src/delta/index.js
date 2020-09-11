@@ -77,6 +77,14 @@ export const Delta = ({name, commandHandler}) =>  {
           });
         }
 
+        if(data.intentName === "GetWeather"){
+          cmdHnd('window', null, (id) => {
+            cmdHnd('weather', data.slots.Postcode, data.slots.Num, (response) => {
+              cmdHnd('window', {id: id, content: JSON.stringify(response.forecasts) }) 
+            });
+          });
+        }
+
     }
   }
 
