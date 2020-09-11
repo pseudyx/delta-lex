@@ -91,7 +91,7 @@ class Draggable extends React.Component{
           lineHeight: '10px'
         }
         
-        var dragging = (this.state.cursor == 'grabbing') ? "dragging" : "";
+        var dragging = (this.state.cursor === 'grabbing') ? "dragging" : "";
 
         return (
             <div className={`draggable ${dragging}`} style={containerStyle}>

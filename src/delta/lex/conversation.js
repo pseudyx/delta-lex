@@ -1,4 +1,4 @@
-import AWS, { config } from 'aws-sdk';
+import AWS from 'aws-sdk';
 import { AudioControl } from './control.js';
 
 const DEFAULT_LATEST = '$LATEST';
@@ -101,7 +101,7 @@ export default class Conversation {
       };
 
     applyDefaults = function(config) {
-        var config = config || {};
+        var resp = config || {};
         config.silenceDetection = config.hasOwnProperty('silenceDetection') ? config.silenceDetection : true;
     
         var lexConfig = config.lexConfig || {};
@@ -110,9 +110,9 @@ export default class Conversation {
         lexConfig.contentType = lexConfig.hasOwnProperty('contentType') ? lexConfig.contentType : DEFAULT_CONTENT_TYPE;
         lexConfig.userId = lexConfig.hasOwnProperty('userId') ? lexConfig.userId : DEFAULT_USER_ID;
         lexConfig.accept = lexConfig.hasOwnProperty('accept') ? lexConfig.accept : DEFAULT_ACCEPT_HEADER_VALUE;
-        config.lexConfig = lexConfig;
+        resp.lexConfig = lexConfig;
     
-        return config;
+        return resp;
     };
 
     validateConfig = () => {

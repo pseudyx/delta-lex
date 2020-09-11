@@ -32,3 +32,18 @@ code {
 background-color: darkgrey;
 outline: 1px solid slategrey;
 }
+
+
+ul.itemGroup{
+  padding: 0;
+  list-style-type: none;
+}
+
+ul.itemGroup li {
+  padding: 2px;
+  margin-bottom: 5px;
+}
+
+ul.itemGroup li span {
+  display: block;
+}

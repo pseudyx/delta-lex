@@ -8,7 +8,7 @@
                 "color": "grey",
                 "size": "20px",
                 "weight": "normal",
-                "coord": "100%-450:40",
+                "coord": "100%-450:55",
                 "value": "Please use the mic button to talk with me"
             },
             "sec": 1
@@ -38,7 +38,7 @@
                 "color": "grey",
                 "size": "20px",
                 "weight": "normal",
-                "coord": "100%-450:40",
+                "coord": "100%-450:55",
                 "value": "Please use the mic button to talk with me"
             },
             "sec": 2
@@ -68,7 +68,7 @@
                 "color": "grey",
                 "size": "20px",
                 "weight": "normal",
-                "coord": "100%-450:40",
+                "coord": "100%-450:55",
                 "value": "Please use the mic button to talk with me"
             },
             "sec": 3
@@ -98,7 +98,7 @@
                 "color": "grey",
                 "size": "20px",
                 "weight": "normal",
-                "coord": "100%-450:40",
+                "coord": "100%-450:55",
                 "value": "Please use the mic button to talk with me"
             },
             "sec": 4

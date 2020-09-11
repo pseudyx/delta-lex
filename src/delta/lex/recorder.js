@@ -54,7 +54,6 @@ export class Recorder {
         worker.onmessage = (message) => {
             var blob = message.data;
             this.currCallback(blob);
-            console.log("onMessage callback");
         };
 
         worker.postMessage({

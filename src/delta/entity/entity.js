@@ -7,13 +7,35 @@ export class Entity{
     this.renderList = [];
     this.eye = {x: 0, y:0 }
     this.voiceBuffer = {dataArray: [128], bufferLength: 1}
+
+    window.requestAnimFrame = (function(callback) {
+      return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame ||
+      function(callback) {
+        window.setTimeout(callback, 1000 / 60);
+      };
+    })();
+
   }
 
-  init(context){
-    this.ctx = context;
-    this.menu = new Menu(context);
+  init(canvasRef, clickEventCallback){
+
+    const canvas = canvasRef.current;
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    this.ctx = canvas.getContext("2d");
+
+    window.addEventListener("resize", (e) => { 
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+
+    canvas.addEventListener('click', (evt) => this.onClick(evt, clickEventCallback), false);
+
+    this.menu = new Menu(this.ctx);
     var startTime = (new Date()).getTime();
     this.loop(this.ctx, startTime);
+
+    return this.ctx;
   }
 
   setVoiceBuffer(dataArray, bufferLength){

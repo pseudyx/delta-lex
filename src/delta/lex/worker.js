@@ -3,35 +3,25 @@ export default () => {
   var recBuffer = [];
   var recordSampleRate = 0;
 
-  onmessage = (event) => {
-    switch (event.data.command) {
-      case 'init':
-        init(event.data.config);
-        break;
-      case 'record':
-        record(event.data.buffer);
-        break;
-      case 'export':
-        exportBuffer(event.data.sampleRate);
-        break;
-      case 'clear':
-        clear();
-        break;
-    }
+  const messageHandler = [];
+  messageHandler['init'] = (data) => init(data);
+  messageHandler['record'] = (data) => record(data);
+  messageHandler['export'] = (data) => exportBuffer(data);
+  messageHandler['clear'] = (data) => clear();
+  onmessage = (event) => messageHandler[event.data.command]?messageHandler[event.data.command](event.data):console.log(`no handler for ${event.data.command}`);
+  
+  const init = (data) => {
+    recordSampleRate = data.config.sampleRate;
   }
 
-  const init = (config) => {
-    recordSampleRate = config.sampleRate;
+  const record = (data) => {
+    recBuffer.push(data.buffer[0]);
+    recLength += data.buffer[0].length;
   }
 
-  const record = (inputBuffer) => {
-    recBuffer.push(inputBuffer[0]);
-    recLength += inputBuffer[0].length;
-  }
-
-  const exportBuffer = (exportSampleRate) => {
+  const exportBuffer = (data) => {
     var mergedBuffers = mergeBuffers(recBuffer, recLength);
-    var downsampledBuffer = downsampleBuffer(mergedBuffers, exportSampleRate);
+    var downsampledBuffer = downsampleBuffer(mergedBuffers, data.sampleRate);
     var encodedWav = encodeWAV(downsampledBuffer);
     var audioBlob = new Blob([encodedWav], {type: 'application/octet-stream'});
     postMessage(audioBlob);

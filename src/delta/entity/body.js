@@ -1,7 +1,7 @@
 export const Body = (ctx, cx, cy) => {
     var offset = { 
         x:  2.1/100*ctx.canvas.width,//40,
-        y: 5.21/100 *ctx.canvas.width //100
+        y: (ctx.canvas.width <= 800 && ctx.canvas.height > 600) ? 30/100 *ctx.canvas.height : 5.21/100 *ctx.canvas.height
     }
 
     leftEar(ctx, cx, cy, offset);

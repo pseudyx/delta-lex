@@ -7,21 +7,21 @@ export class ActionScripter {
     }
 
     start = (script, callback = ()=>console.log('end script')) => {
-        if(typeof script == "string"){
+        if(typeof script === "string"){
             this.loadScript(script, callback);
         } else {
             this.script = script;
             var startTime = (new Date()).getTime();
-            console.log(`Start script: ${startTime}`)
+            //console.log(`Start script: ${startTime}`)
             setTimeout(()=> {this.timeLine(startTime, callback)}, 500);
         }
     }
 
     loadScript(name, callback = ()=>console.log('end script')){
         this.importScript(name, (res) => {
-            if(res.replay == false){
+            if(res.replay === false){
                 var replay = utils.getCookie(`noReplay-${name}`);
-                if(replay != ""){
+                if(replay !== ""){
                     callback();
                 } else {
                     utils.setCookie(`noReplay-${name}`, true);
@@ -42,7 +42,7 @@ export class ActionScripter {
         var sec = Math.round((time/1000)*2)/2;//to the nearest half sec n.5
 
         if(this.script.length > 0){
-            var acts = this.script.filter(act => act.sec == sec);
+            var acts = this.script.filter(act => act.sec === sec);
             this.script = this.script.filter(act => !acts.includes(act))
             acts.forEach((act) => {
                 switch(act.type){
@@ -51,6 +51,9 @@ export class ActionScripter {
                         break;
                     case "clear":
                         act.fx(this.Actions);
+                        break;
+                    default:
+                        break;
                 }
             });
 
@@ -136,7 +139,7 @@ const coordMeasure = (bearing, coord) => {
     var resp;
     if(/[0-9]*[%]/g.test(coord)){
         var per = parseInt(coord.match(/^[0-9]*/g));
-        if(/(\+|\-)[0-9]*$/g.test(coord)){
+        if(/(\+|-)[0-9]*$/g.test(coord)){
             var px = parseInt(coord.match(/[0-9]*$/g));
             switch(`${coord.match(/([+]|[-])/g)}`){
                 case "+":
@@ -144,6 +147,8 @@ const coordMeasure = (bearing, coord) => {
                     break;
                 case "-":
                     resp = (per/100*bearing) - px;
+                    break;
+                default:
                     break;
             }
         } else {
