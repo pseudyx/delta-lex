@@ -7,6 +7,9 @@ export class Entity{
     this.renderList = [];
     this.eye = {x: 0, y:0 }
     this.voiceBuffer = {dataArray: [128], bufferLength: 1}
+    this.bodyEnabled = true;
+    this.eyeEnabled = true;
+    this.voiceVisualEnabled = true;
 
     window.requestAnimFrame = (function(callback) {
       return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame ||
@@ -36,6 +39,18 @@ export class Entity{
     this.loop(this.ctx, startTime);
 
     return this.ctx;
+  }
+
+  toggleBody = () => {
+    this.bodyEnabled = !this.bodyEnabled;
+  }
+
+  toggleEye = () => {
+    this.eyeEnabled = !this.eyeEnabled;
+  }
+
+  toggleVoiceVisual = () => {
+    this.voiceVisualEnabled = !this.voiceVisualEnabled;
   }
 
   setVoiceBuffer(dataArray, bufferLength){
@@ -82,9 +97,9 @@ export class Entity{
     // clear
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
   
-    Body(ctx, nextx, nexty);
-    Eyeball(ctx, nextx, nexty, this.eye.x, this.eye.y);
-    this.VoiceVisualizer(ctx, nextx, nexty, this.eye.x, this.eye.y);
+    if(this.bodyEnabled)Body(ctx, nextx, nexty);
+    if(this.eyeEnabled)Eyeball(ctx, nextx, nexty, this.eye.x, this.eye.y);
+    if(this.voiceVisualEnabled)this.VoiceVisualizer(ctx, nextx, nexty, this.eye.x, this.eye.y);
     this.menu.render();
   
     this.renderList.forEach(action => action.fx(ctx));
@@ -103,20 +118,27 @@ export class Entity{
 
       var sliceWidth = LENGTH * 1.0 / this.voiceBuffer.bufferLength;
 
-      lx = (lx > 10) ? 10 : lx;
-      lx = (lx < -10) ? -10 : lx;
-      ly = (ly > 10) ? 10 : ly;
-      ly = (ly < -10) ? -10 : ly;
+      if(this.eyeEnabled){
+        lx = (lx > 10) ? 10 : lx;
+        lx = (lx < -10) ? -10 : lx;
+        ly = (ly > 10) ? 10 : ly;
+        ly = (ly < -10) ? -10 : ly;
+      } else {
+        lx = 0;
+        ly = 0;
+      }
 
       for (var i = 0; i < this.voiceBuffer.bufferLength; i++) {
         var v = this.voiceBuffer.dataArray[i] / 128.0;
         var y = v*cy;
         /* == Constrain to max length == */
-        if(y > cy+(LENGTH/2)){
-          y = cy+(LENGTH/2);
-        }
-        if(y < cy-(LENGTH/2)){
-          y = cy-(LENGTH/2);
+        if(this.eyeEnabled){
+          if(y > cy+(LENGTH/2)){
+            y = cy+(LENGTH/2);
+          }
+          if(y < cy-(LENGTH/2)){
+            y = cy-(LENGTH/2);
+          }
         }
         /* == */
         if (i === 0) {

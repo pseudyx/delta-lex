@@ -49,6 +49,9 @@ cmder["window"] = (args, emitter) => {
   if(iwin.id){
     emitter.emit('updateWindow', iwin);
   } else {
+    if(typeof callback !== 'function'){
+      callback = ()=>{};
+    }
     emitter.emit('addWindow', iwin, callback);
   }
 

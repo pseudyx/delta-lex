@@ -39,6 +39,7 @@ export const Delta = ({name, commandHandler}) =>  {
     eventHandler.on('MicBtn', () => conversation.advanceConversation());
     eventHandler.on('Listening', () => Entity.menu.onRecord());
     eventHandler.on('Sending', () => Entity.menu.onStop());
+    eventHandler.on('SettingsBtn', () => cmdHnd('window', {content: deltaMenu(), width:222, height:170 }));
 
   }, []);
 
@@ -77,6 +78,19 @@ export const Delta = ({name, commandHandler}) =>  {
         }
 
     }
+  }
+
+  const deltaMenu = () => {
+    
+    return (
+    <div>
+      <p>Customize the Entiy by toggling visual components</p>
+      <ul>
+      <li><button onClick={Entity.toggleBody}>Toggle</button> Body</li>
+      <li><button onClick={Entity.toggleEye}>Toggle</button> Eye</li>
+      <li><button onClick={Entity.toggleVoiceVisual}>Toggle</button> Mouth</li>
+      </ul>
+    </div>)
   }
 
   
