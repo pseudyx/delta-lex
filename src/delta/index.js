@@ -3,6 +3,7 @@ import AWS from 'aws-sdk';
 import Entity from './entity/entity';
 import ActionScripter from './actionScripter';
 import LexAudio from './lex/lex-audio';
+import eventHandler from './eventHandler';
 import appConfig from '../app-config';
 import * as utils from '../lib/utils';
 import listItemGroup from '../components/listItemGroup';
@@ -22,7 +23,7 @@ export const Delta = ({name, commandHandler}) =>  {
   const conversation = new LexAudio.Conversation(config, onStateChange, onSuccess, onError, onAudioData);
 
   useEffect(() => {    
-    Entity.init(canvasRef, eventTrigger);
+    Entity.init(canvasRef, entityEvent);
     Entity.isInteractive(false);
     ActionScripter.Actions = Entity.renderList;  
 
@@ -35,6 +36,10 @@ export const Delta = ({name, commandHandler}) =>  {
       setTimeout(() => conversation.elicitIntent('Intro', 'Delegate'), 2000);
     }
 
+    eventHandler.on('MicBtn', () => conversation.advanceConversation());
+    eventHandler.on('Listening', () => Entity.menu.onRecord());
+    eventHandler.on('Sending', () => Entity.menu.onStop());
+
   }, []);
 
   const enableInteraction = () => {
@@ -42,15 +47,12 @@ export const Delta = ({name, commandHandler}) =>  {
     ActionScripter.start("interact");
   }
 
-  const eventHandlers = [];
-  const eventTrigger = (evt) => eventHandlers[evt.name]?eventHandlers[evt.name](evt.state):()=>{};
-
-  eventHandlers["MicBtn"] = (evtState) => conversation.advanceConversation();
-  eventHandlers['Listening'] = () => Entity.menu.onRecord();
-  eventHandlers['Sending'] = () => Entity.menu.onStop();
+  function entityEvent(evt) {
+    eventHandler.emit(evt.name);
+  }
 
   function onStateChange(state) {
-    eventTrigger({name: state});
+    eventHandler.emit(state);
   }
 
   function onError(error) {
