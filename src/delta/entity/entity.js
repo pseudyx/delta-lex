@@ -7,9 +7,9 @@ export class Entity{
     this.renderList = [];
     this.eye = {x: 0, y:0 }
     this.voiceBuffer = {dataArray: [128], bufferLength: 1}
-    this.bodyEnabled = true;
-    this.eyeEnabled = true;
-    this.voiceVisualEnabled = true;
+    this.bodyEnabled = (localStorage.getItem("entityBodyEnabled") === 'false') ? false : true;
+    this.eyeEnabled = (localStorage.getItem("entityEyeEnabled") === 'false') ? false : true;
+    this.voiceVisualEnabled = (localStorage.getItem("entityVoiceVisualEnabled") === 'false') ? false : true;
 
     window.requestAnimFrame = (function(callback) {
       return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame ||
@@ -43,14 +43,17 @@ export class Entity{
 
   toggleBody = () => {
     this.bodyEnabled = !this.bodyEnabled;
+    localStorage.setItem("entityBodyEnabled", this.bodyEnabled);
   }
 
   toggleEye = () => {
     this.eyeEnabled = !this.eyeEnabled;
+    localStorage.setItem("entityEyeEnabled", this.eyeEnabled);
   }
 
   toggleVoiceVisual = () => {
     this.voiceVisualEnabled = !this.voiceVisualEnabled;
+    localStorage.setItem("entityVoiceVisualEnabled", this.voiceVisualEnabled);
   }
 
   setVoiceBuffer(dataArray, bufferLength){
@@ -109,8 +112,8 @@ export class Entity{
   }
 
   VoiceVisualizer = (ctx, cx, cy, lx, ly) => {
-    var LENGTH = 4.1/100 *ctx.canvas.width;
-    var x = cx - (LENGTH/2);
+    var LENGTH = this.eyeEnabled ? 4.1/100 *ctx.canvas.width : ctx.canvas.width;
+    var x = this.eyeEnabled ? cx - (LENGTH/2) : 0;
 
       ctx.lineWidth = 1;
       ctx.strokeStyle = 'rgb(77, 78, 128)';
@@ -126,6 +129,7 @@ export class Entity{
       } else {
         lx = 0;
         ly = 0;
+        cy = ctx.canvas.height/2;
       }
 
       for (var i = 0; i < this.voiceBuffer.bufferLength; i++) {

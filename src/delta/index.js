@@ -5,7 +5,6 @@ import ActionScripter from './actionScripter';
 import LexAudio from './lex/lex-audio';
 import eventHandler from './eventHandler';
 import appConfig from '../app-config';
-import * as utils from '../lib/utils';
 import listItemGroup from '../components/listItemGroup';
 
 AWS.config.credentials = new AWS.Credentials(appConfig.aws_iam_key, appConfig.aws_iam_secret, null);
@@ -28,7 +27,7 @@ export const Delta = ({name, commandHandler}) =>  {
     ActionScripter.Actions = Entity.renderList;  
 
     // initial Intro or Welcome message 
-    if(utils.getCookie(`noReplay-intro`) !== ""){
+    if(localStorage.getItem(`noReplay-intro`) !== null){
       enableInteraction();
       conversation.elicitIntent('Welcome', 'Delegate');
     } else {
@@ -94,9 +93,8 @@ export const Delta = ({name, commandHandler}) =>  {
     <div>
       <p>Customize the Entiy by toggling visual components</p>
       <ul>
-      <li><button onClick={Entity.toggleBody}>Toggle</button> Body</li>
-      <li><button onClick={Entity.toggleEye}>Toggle</button> Eye</li>
-      <li><button onClick={Entity.toggleVoiceVisual}>Toggle</button> Mouth</li>
+      <li><button onClick={() => {Entity.toggleBody(); Entity.toggleEye(); }}>Toggle</button> Entity</li>
+      <li><button onClick={Entity.toggleVoiceVisual}>Toggle</button> Voice Visual</li>
       </ul>
     </div>)
   }

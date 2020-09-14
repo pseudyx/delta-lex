@@ -1,4 +1,3 @@
-import * as utils from '../lib/utils';
 
 export class ActionScripter {
     constructor(actions = []){
@@ -20,11 +19,11 @@ export class ActionScripter {
     loadScript(name, callback = ()=>console.log('end script')){
         this.importScript(name, (res) => {
             if(res.replay === false){
-                var replay = utils.getCookie(`noReplay-${name}`);
-                if(replay !== ""){
+                var replay = localStorage.getItem(`noReplay-${name}`);
+                if(replay !== null){
                     callback();
                 } else {
-                    utils.setCookie(`noReplay-${name}`, true);
+                    localStorage.setItem(`noReplay-${name}`, true);
                     this.start(this.convertJsonToActionScript(res.script), callback);
                 }
             } else {

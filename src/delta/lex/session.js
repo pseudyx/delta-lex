@@ -1,13 +1,13 @@
-import * as utils from "../../lib/utils";
+import { uuidv4 } from "../../lib/utils";
 
 const DEFAULT_LATEST = '$LATEST';
 
 const botConfig = params => {
-    let id = utils.getCookie('botSessionId');
+    let id = localStorage.getItem('botSessionId');
         
-    if(id === ""){
-        id = utils.uuidv4();
-        utils.setCookie('botSessionId', id);
+    if(id === null){
+        id = uuidv4();
+        localStorage.setItem('botSessionId', id);
     } 
 
     return { 
