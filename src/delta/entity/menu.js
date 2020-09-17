@@ -10,10 +10,10 @@ export class Menu {
     }
     
     onClick(pos, callBack){
-        if(this.micBtn.hitRadius(pos)){
+        if(this.micBtn.hitTest(pos)){
             callBack({name: "MicBtn", state: this.micBtn.toggle});
         }
-        if(this.SettingsMnu.hitRadius(pos)){
+        if(this.SettingsMnu.hitTest(pos)){
             callBack({name: "SettingsBtn", state: this.SettingsMnu.toggle});
         }
     }

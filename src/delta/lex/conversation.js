@@ -5,6 +5,7 @@ const DEFAULT_LATEST = '$LATEST';
 const DEFAULT_CONTENT_TYPE = 'audio/x-l16; sample-rate=16000';
 const DEFAULT_USER_ID = 'userId';
 const DEFAULT_ACCEPT_HEADER_VALUE = 'audio/mpeg';
+const TEXT_CONTENT_TYPE = 'text/plain; charset=utf-8';
 
 
 export default class Conversation {
@@ -56,6 +57,24 @@ export default class Conversation {
           });
 
         console.log(`putSession: ${intentName}`);
+    }
+
+    sendText = (message) => {
+        this.lexConfig.inputStream = message;
+        this.lexConfig.contentType = TEXT_CONTENT_TYPE;
+        this.lexruntime.postContent(this.lexConfig, (err, data) => {
+            if (err) {
+                this.onError(err);
+                this.lexConfig.contentType = DEFAULT_CONTENT_TYPE;
+                this.transition(new Initial(this));
+            } else {
+                this.audioOutput = data;
+                this.lexConfig.contentType = DEFAULT_CONTENT_TYPE;
+                this.transition(new Speaking(this));
+                this.onSuccess(data);
+            }
+        });
+
     }
 
     onSilence = () => {

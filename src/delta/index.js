@@ -5,12 +5,12 @@ import ActionScripter from './actionScripter';
 import LexAudio from './lex/lex-audio';
 import eventHandler from './eventHandler';
 import appConfig from '../app-config';
-import listItemGroup from '../components/listItemGroup';
+
 
 AWS.config.credentials = new AWS.Credentials(appConfig.aws_iam_key, appConfig.aws_iam_secret, null);
 AWS.config.region = appConfig.aws_region;
 
-export const Delta = ({name, commandHandler}) =>  {
+export const Delta = ({name, commandHandler, message}) =>  {
   const cmdHnd = (typeof commandHandler === 'function') ? commandHandler : (cmd, ...args) => console.log(cmd, args);
   const canvasRef = useRef(null);
   const cnvStyle = {
@@ -20,6 +20,10 @@ export const Delta = ({name, commandHandler}) =>  {
     lexConfig: LexAudio.Session({ botName: name })
   }
   const conversation = new LexAudio.Conversation(config, onStateChange, onSuccess, onError, onAudioData);
+
+  useEffect(() => {
+    conversation.sendText(message);
+  }, [message]);
 
   useEffect(() => {    
     Entity.init(canvasRef, entityEvent);
@@ -56,6 +60,7 @@ export const Delta = ({name, commandHandler}) =>  {
   }
 
   function onError(error) {
+    eventHandler.emit('onError', error);
     console.log(error);
   }
 
@@ -64,31 +69,12 @@ export const Delta = ({name, commandHandler}) =>  {
   }
 
   function onSuccess(data){
+    eventHandler.emit('onSuccess', data);
     //console.log('Transcript: ', data.inputTranscript, ", Response: ", data.message);
-
-    if(data.dialogState === "Fulfilled"){
-
-        if(data.intentName === "Search"){
-          cmdHnd('window', null, (id) => {
-            cmdHnd('search', data.slots.Query, data.slots.Num, (response) => {
-              cmdHnd('window', {id: id, content: listItemGroup(response.results) }) 
-            });
-          });
-        }
-
-        if(data.intentName === "GetWeather"){
-          cmdHnd('window', null, (id) => {
-            cmdHnd('weather', data.slots.Postcode, data.slots.Num, (response) => {
-              cmdHnd('window', {id: id, content: JSON.stringify(response.forecasts) }) 
-            });
-          });
-        }
-
-    }
   }
 
   const deltaMenu = () => {
-    
+
     return (
     <div>
       <p>Customize the Entiy by toggling visual components</p>
@@ -104,4 +90,5 @@ export const Delta = ({name, commandHandler}) =>  {
 
 }
 
+export let Events = eventHandler;
 export default Delta;

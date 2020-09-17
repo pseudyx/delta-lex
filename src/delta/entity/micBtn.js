@@ -26,7 +26,7 @@ export class MicBtn {
         this.enable = false;
     }
 
-    hitRadius(pos){
+    hitTest(pos){
         var hit = pos.x > this.pos.x-this.pos.r && pos.x < this.pos.x+this.pos.r && pos.y < this.pos.y+this.pos.r && pos.y > this.pos.y-this.pos.r;
         if(hit){
             this.onPress();

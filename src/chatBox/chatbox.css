@@ -1,0 +1,69 @@
+.chatBox{
+    display: block;
+    position: absolute;
+    top: 100px;
+    right: 0px;
+}
+.chatTab{
+    position: absolute;
+    right: 10px;
+    top: -25px;
+}
+.chatTab::before{ 
+    color: #505050;
+    font-family: FontAwesome;
+    content: "\f086";
+}
+.chatBody{
+    position: relative;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid silver;
+    width: 400px;
+    height: 300px;
+
+}
+.chatContent{
+    padding: 4px;
+    margin: 0;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    font-family: "Lucida Console", Monaco, monospace;
+    font-size: small; 
+    height: 292px;
+}
+
+.chatContent::-webkit-scrollbar {
+    width: 10px;
+  }
+  
+  .chatContent::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+  }
+  
+  .chatContent::-webkit-scrollbar-thumb {
+  background-color: darkgrey;
+  outline: 1px solid slategrey;
+  }
+  
+
+.chatInput{
+    color:  rgba(100, 100, 255);
+    float: left;
+    clear: both;
+    max-width: 300px;
+    margin-bottom: 4px;
+    
+    /* border: 1px solid blue;
+    background-color: rgba(0, 30, 255); */
+}
+.chatResponse{
+    color: red;
+    float: right;
+    max-width: 300px;
+    clear: both;
+    text-align: right;
+    margin-bottom: 4px;
+    /* border: 1px solid red;
+    background-color: rgba(255, 0, 0); */
+}

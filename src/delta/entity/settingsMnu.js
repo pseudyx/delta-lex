@@ -26,7 +26,7 @@ export class SettingsMnu {
         this.enable = false;
     }
 
-    hitRadius(pos){
+    hitTest(pos){
         var hit = pos.x > this.pos.x && pos.x < this.pos.x+80 && pos.y < this.pos.y && pos.y > this.pos.y-20;
         if(hit){
             this.onPress();
