@@ -10,8 +10,7 @@ import appConfig from '../app-config';
 AWS.config.credentials = new AWS.Credentials(appConfig.aws_iam_key, appConfig.aws_iam_secret, null);
 AWS.config.region = appConfig.aws_region;
 
-export const Delta = ({name, commandHandler, message}) =>  {
-  const cmdHnd = (typeof commandHandler === 'function') ? commandHandler : (cmd, ...args) => console.log(cmd, args);
+export const Delta = ({name, message}) =>  {
   const canvasRef = useRef(null);
   const cnvStyle = {
     backgroundColor: 'black'
@@ -42,7 +41,7 @@ export const Delta = ({name, commandHandler, message}) =>  {
     eventHandler.on('MicBtn', () => conversation.advanceConversation());
     eventHandler.on('Listening', () => Entity.menu.onRecord());
     eventHandler.on('Sending', () => Entity.menu.onStop());
-    eventHandler.on('SettingsBtn', () => cmdHnd('window', {content: deltaMenu(), width:222, height:170 }));
+    eventHandler.on('SettingsBtn', () => eventHandler.emit('SettingsMenu', deltaSettings));
 
   }, []);
 
@@ -73,18 +72,10 @@ export const Delta = ({name, commandHandler, message}) =>  {
     //console.log('Transcript: ', data.inputTranscript, ", Response: ", data.message);
   }
 
-  const deltaMenu = () => {
-
-    return (
-    <div>
-      <p>Customize the Entiy by toggling visual components</p>
-      <ul>
-      <li><button onClick={() => {Entity.toggleBody(); Entity.toggleEye(); }}>Toggle</button> Entity</li>
-      <li><button onClick={Entity.toggleVoiceVisual}>Toggle</button> Voice Visual</li>
-      </ul>
-    </div>)
+  const deltaSettings = {
+    ToggleEntity: () => {Entity.toggleBody(); Entity.toggleEye(); },
+    ToggleVoiceVisual: () => Entity.toggleVoiceVisual()
   }
-
   
   return (<canvas ref={canvasRef} id="cnv" style={cnvStyle}>Your browser does not support the HTML canvas tag.</canvas>);
 

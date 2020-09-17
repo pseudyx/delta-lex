@@ -70,7 +70,7 @@ export default class Conversation {
             } else {
                 this.audioOutput = data;
                 this.lexConfig.contentType = DEFAULT_CONTENT_TYPE;
-                this.transition(new Speaking(this));
+                this.transition(new Texting(this));
                 this.onSuccess(data);
             }
         });
@@ -222,6 +222,23 @@ export class Speaking {
                 this.state.audioControl.startRecording(this.state.onSilence, this.state.onAudioData, this.state.config.silenceDetectionConfig);
                 this.state.transition(new Listening(this.state));
             }
+            }, this.state.onAudioData);
+        } else {
+            this.state.transition(new Initial(this.state));
+        }
+    };
+};
+
+export class Texting {
+    constructor (state) {
+        this.state = state;
+        this.state.message = state.messages.SPEAKING;
+    }
+    
+    advanceConversation = () => {
+        if (this.state.audioOutput.contentType === 'audio/mpeg') {
+            this.state.audioControl.play(this.state.audioOutput.audioStream, () => {
+                this.state.transition(new Initial(this.state));
             }, this.state.onAudioData);
         } else {
             this.state.transition(new Initial(this.state));

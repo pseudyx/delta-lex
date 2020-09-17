@@ -12,6 +12,7 @@ function App() {
   const stackRef = React.useRef();
   const [transcript, setTranscript] = useState([]);
   const [message, setMessage] = useState(null);
+  const [diagOn, setDiagOn] = useState(null);
 
   useEffect(() => {    
     cmder.on('addWindow', (content, callback) => callback(stackRef.current.add(content)));
@@ -44,8 +45,23 @@ function App() {
       }
     });
 
+    Events.on('SettingsMenu', (ctr) => {
+      command('window', {content: deltaSettings(ctr), width:222, height:170 })
+    });
+
   }, []);
 
+  const deltaSettings = (ctr) => {
+    return (
+      <div>
+        <p>Customize the Entiy by toggling visual components</p>
+        <ul>
+        <li><button onClick={ctr.ToggleEntity}>Toggle</button> Entity</li>
+        <li><button onClick={ctr.ToggleVoiceVisual}>Toggle</button> Voice Visual</li>
+        <li><button onClick={() => setDiagOn(prev => !prev)}>Toggle</button> Dialogue</li>
+        </ul>
+      </div>)
+  }
   
 
   const manageTranscript = (data) =>{
@@ -66,9 +82,9 @@ function App() {
 
   return (
     <div className="App">
-      <ChatBox transcript={transcript} sendHandler={sendText} />
+      <ChatBox transcript={transcript} sendHandler={sendText} enabled={diagOn} />
       <Stack ref={stackRef} />
-      <Delta name={'Delta_AU'} commandHandler={command} message={message} />
+      <Delta name={'Delta_AU'} message={message} />
     </div>
   );
 }

@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import './chatbox.css';
 
-export const ChatBox = ({transcript, sendHandler}) =>  {
+export const ChatBox = ({transcript, sendHandler, enabled = false}) =>  {
     const [open, setOpen] = useState(false);
+    // const [enabled, setEnabled] = useState(false);
     const [inputValue, setInputValue] = useState("");
 
     const line = (number,data) => {
@@ -25,8 +26,14 @@ export const ChatBox = ({transcript, sendHandler}) =>  {
             return null;
         }
     }
+
+    const sendInput = () => {
+        sendHandler(inputValue);
+        setInputValue("");
+    }
   
-    return (
+    if(enabled){
+        return (
         <div className={'chatBox'}>
             <div className={'chatTab'} onClick={() => setOpen(prev => !prev)}></div>
             {(open) ? 
@@ -34,9 +41,12 @@ export const ChatBox = ({transcript, sendHandler}) =>  {
                 <div className={'chatContent'}>
                         {transcript.map((data, i) => line(i,data))}
                 </div>
-                <div><input type="text" value={ inputValue } onChange={ (evt) => setInputValue(evt.target.value) }></input><button onClick={() => sendHandler(inputValue)}>submit</button></div>
+                <div><input type="text" value={ inputValue } onChange={ (evt) => setInputValue(evt.target.value) }></input><button onClick={sendInput}>submit</button></div>
             </div> : null}
         </div>);
+    } else {
+        return null;
+    }
 
 }
 

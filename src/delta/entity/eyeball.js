@@ -21,7 +21,15 @@ const Eyeball = (ctx, cx, cy, lx=0, ly=0) =>{
     ctx.fill();
     ctx.lineWidth = 5;
     ctx.strokeStyle = "rgba(255, 255, 255, 0.25)";
-    ctx.stroke();   
+    ctx.stroke();  
+    
+    ctx.beginPath();
+    ctx.arc(cx, cy, ballRadius, 0, 2 * Math.PI, false);
+    var grd1 = ctx.createRadialGradient(cx, cy, ballRadius/2, cx, cy, ballRadius);
+    grd1.addColorStop(1, "rgba(0, 0, 0, 0.25)");
+    grd1.addColorStop(0, "rgba(0, 0, 0, 1)");
+    ctx.fillStyle = grd1;
+    ctx.fill();
 
     lx = (lx > 10) ? 10 : lx;
     lx = (lx < -10) ? -10 : lx;
